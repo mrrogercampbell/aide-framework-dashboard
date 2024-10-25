@@ -1,0 +1,43 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a direct connection
+}
+
+model AwarenessForm {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Basic Info
+  fullName String
+  email    String
+  company  String
+  title    String
+  date     DateTime
+
+  // Form Data - stored as JSON
+  aiUsage            Json
+  businessGoals      Json
+  criticalProcesses  Json
+  processAnalysis    Json
+  integrationSummary Json
+
+  // Associated PDF document
+  pdfDocument Document?
+}
+
+model Document {
+  id            String        @id @default(cuid())
+  fileName      String
+  fileType      String
+  fileData      Bytes
+  createdAt     DateTime      @default(now())
+  awarenessForm AwarenessForm @relation(fields: [formId], references: [id])
+  formId        String        @unique
+}
