@@ -121,15 +121,15 @@ export default function AwarenessPage() {
                 </div>
 
                 {/* Only show the test data button in development */}
-                {process.env.NODE_ENV === 'development' && (
-                    <button
-                        type="button"
-                        onClick={handleFillTestData}
-                        className="mb-4 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500"
-                    >
-                        Fill Test Data
-                    </button>
-                )}
+                {/* {process.env.NODE_ENV === 'development' && ( */}
+                <button
+                    type="button"
+                    onClick={handleFillTestData}
+                    className="mb-4 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500"
+                >
+                    Fill Test Data
+                </button>
+                {/* )} */}
 
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
