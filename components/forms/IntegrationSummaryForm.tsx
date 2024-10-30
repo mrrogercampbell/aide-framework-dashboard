@@ -230,7 +230,7 @@ export function IntegrationSummaryForm({ register, errors, control }: Integratio
 
             {fields.length === 0 && (
                 <div className="text-center py-4 text-gray-500">
-                    No integration opportunities added yet. Click "Add Opportunity" to start.
+                    No integration opportunities added yet. Click &quot;Add Opportunity&quot; to start.
                 </div>
             )}
         </div>

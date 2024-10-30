@@ -28,7 +28,7 @@ export function ProcessAnalysisForm({ register, errors, control }: ProcessAnalys
                 <h2 className="text-xl font-bold">Process Analysis</h2>
                 <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                     <p className="text-sm text-yellow-700">
-                        No processes have been marked for analysis. Return to the Processes section and check "Analyze this process" for any processes you want to analyze in detail.
+                        No processes have been marked for analysis. Return to the &quot;Processes&quot; section and check &quot;Analyze this process&quot; for any processes you want to analyze in detail.
                     </p>
                 </div>
             </div>

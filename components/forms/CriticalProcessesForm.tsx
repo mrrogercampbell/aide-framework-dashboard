@@ -137,7 +137,7 @@ export function CriticalProcessesForm({ register, errors, control }: CriticalPro
 
             {fields.length === 0 && (
                 <div className="text-center py-4 text-gray-500">
-                    No processes added yet. Click "Add Process" to start.
+                    No processes added yet. Click &quot;Add Process&quot; to start.
                 </div>
             )}
         </div>

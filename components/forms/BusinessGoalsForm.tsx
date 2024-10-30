@@ -98,7 +98,7 @@ export function BusinessGoalsForm({ register, errors, control }: BusinessGoalsFo
 
             {fields.length === 0 && (
                 <div className="text-center py-4 text-gray-500">
-                    No goals added yet. Click "Add Goal" to start.
+                    No goals added yet. Click &quot;Add Goal&quot; to start.
                 </div>
             )}
         </div>
