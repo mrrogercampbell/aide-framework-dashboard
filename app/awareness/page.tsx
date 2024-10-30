@@ -116,7 +116,7 @@ export default function AwarenessPage() {
                 <div>
                     <h1 className="text-3xl font-bold">The A.I.D.E. Framework&trade; Workbook: Awareness</h1>
                     <p className="mt-2 text-gray-600">
-                        Complete this form to assess your organization's current AI usage and future opportunities.
+                        Complete this form to assess your organization&apos;s current AI usage and future opportunities.
                     </p>
                 </div>
 

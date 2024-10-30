@@ -1,8 +1,40 @@
 import { BaseGenerator } from './BaseGenerator';
 import type { FormData } from '../types';
 import { STYLES } from '../constants/styles';
+import type { jsPDF } from 'jspdf';
 
 export class FormGenerator extends BaseGenerator {
+    constructor() {
+        super();
+
+        // Add header to all pages
+        const headerFunction = (doc: jsPDF, pageInfo: any): number[] => {
+            // Save the current state
+            this.doc.saveGraphicsState();
+
+            // Add logo to top left of every page
+            this.doc.addImage(
+                '/images/logo.png',  // Update this path to match your logo location
+                'PNG',
+                this.x,
+                10,  // Y position from top
+                40,  // Width of logo
+                40,  // Height of logo
+                'logo',  // Alias for the image
+                'FAST'   // Compression option
+            );
+
+            // Restore the state
+            this.doc.restoreGraphicsState();
+
+            // Return margins [left, top, right, bottom]
+            return [this.x, 60, this.x, 30];  // Adjust these values as needed
+        };
+
+        // Set up header for all pages
+        this.doc.setHeaderFunction(headerFunction);
+    }
+
     private addBasicInfo(data: any) {
         this.addSectionTitle('Basic Information');
         this.addFormField('Full Name:', data.fullName);
