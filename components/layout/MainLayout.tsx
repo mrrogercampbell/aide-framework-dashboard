@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import Image from 'next/image';
 
 interface MainLayoutProps {
     children: ReactNode;
@@ -14,9 +15,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            <div className="flex-shrink-0 flex items-center">
-                                <Link href="/" className="text-xl font-bold text-gray-800">
-                                    A.I.D.E Framework
+                            <div className="flex-shrink-0 flex items-center space-x-2">
+                                <Link href="/">
+                                    <Image
+                                        src="/images/horizontal.svg"
+                                        alt="Company Logo"
+                                        width={35}
+                                        height={35}
+                                        className="h-10 w-auto"
+                                    />
                                 </Link>
                             </div>
                             <div className="hidden md:ml-6 md:flex md:space-x-8">
