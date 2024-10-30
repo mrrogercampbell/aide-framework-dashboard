@@ -1,9 +1,10 @@
 // app/awareness/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { useFormStore } from '@/store/formStore';
 import { BasicInfoForm } from '@/components/forms/BasicInfoForm';
 import { AIUsageForm } from '@/components/forms/AIUsageForm';
 import { BusinessGoalsForm } from '@/components/forms/BusinessGoalsForm';
@@ -13,9 +14,8 @@ import { IntegrationSummaryForm } from '@/components/forms/IntegrationSummaryFor
 import { AwarenessFormInput, AwarenessFormData } from '@/types/awareness';
 import { getTestFormData } from '@/utils/testData';
 
-
 export default function AwarenessPage() {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { formData, isSubmitting, setFormData, setIsSubmitting, resetForm } = useFormStore();
     const [formId, setFormId] = useState<string | null>(null);
 
     const {
@@ -24,37 +24,38 @@ export default function AwarenessPage() {
         handleSubmit,
         watch,
         reset,
-        formState: { errors },
+        formState: { errors, isDirty },
     } = useForm<AwarenessFormInput>({
-        defaultValues: {
-            basicInfo: {
-                date: new Date().toISOString().split('T')[0],
-                fullName: '',
-                email: '',
-                company: '',
-                title: ''
-            },
-            aiUsage: [{
-                toolName: '',
-                department: '',
-                purpose: ''
-            }],
-            businessGoals: [],
-            criticalProcesses: [],
-            processAnalysis: [],
-            integrationSummary: []
-        }
+        defaultValues: formData
     });
 
-    // Add this function
-    const handleFillTestData = () => {
-        const testData = getTestFormData();
-        reset(testData);
-    };
+    useEffect(() => {
+        if (formData) {
+            reset(formData);
+        }
+    }, [formData, reset]);
 
-    // Watch for changes in criticalProcesses to enable/disable the process analysis section
+    // Watch for changes in criticalProcesses
     const criticalProcesses = watch('criticalProcesses');
     const hasProcessesToAnalyze = criticalProcesses?.some(p => p.analyzeProcess);
+
+    // Update store only when form is dirty and not submitting
+    const formValues = watch();
+    useEffect(() => {
+        if (isDirty && !isSubmitting) {
+            const timeoutId = setTimeout(() => {
+                setFormData(formValues);
+            }, 1000); // Debounce updates
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [formValues, isDirty, isSubmitting, setFormData]);
+
+    const handleFillTestData = () => {
+        const testData = getTestFormData() as AwarenessFormInput;
+        reset(testData);
+        setFormData(testData);
+    };
 
     const onSubmit = async (formData: AwarenessFormInput) => {
         setIsSubmitting(true);
@@ -83,18 +84,12 @@ export default function AwarenessPage() {
 
             setFormId(result.formId);
             toast.success('Form submitted successfully!');
+            resetForm();
 
-            // Updated PDF download logic
+            // PDF download logic
             const pdfResponse = await fetch(`/api/forms/${result.formId}/pdf`);
-            const contentType = pdfResponse.headers.get('content-type');
-
-            if (!pdfResponse.ok) {
-                const errorData = await pdfResponse.json();
-                throw new Error(errorData.error || 'Failed to generate PDF');
-            }
-
-            if (!contentType?.includes('application/pdf')) {
-                throw new Error('Invalid response format');
+            if (!pdfResponse.ok || !pdfResponse.headers.get('content-type')?.includes('application/pdf')) {
+                throw new Error('Failed to generate PDF');
             }
 
             const blob = await pdfResponse.blob();
@@ -147,7 +142,17 @@ export default function AwarenessPage() {
                     )}
                     <IntegrationSummaryForm register={register} errors={errors} control={control} />
 
-                    <div className="flex justify-end">
+                    <div className="flex justify-end gap-4">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                reset({} as AwarenessFormInput);
+                                resetForm();
+                            }}
+                            className="px-6 py-3 bg-gray-600 text-white rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                        >
+                            Clear Form
+                        </button>
                         <button
                             type="submit"
                             disabled={isSubmitting}
@@ -187,7 +192,7 @@ export default function AwarenessPage() {
                 {formId && (
                     <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
                         <p className="text-green-800">
-                            Form saved successfully! Your form ID is: {formId}
+                            Form saved successfully!
                         </p>
                         <p className="text-sm text-green-600 mt-1">
                             A PDF version of your submission will download automatically.
