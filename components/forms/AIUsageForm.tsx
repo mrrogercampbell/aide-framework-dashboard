@@ -1,6 +1,7 @@
 // components/forms/AIUsageForm.tsx
 import { UseFormRegister, useFieldArray } from 'react-hook-form';
-import { AIUsage } from '@/types/awareness';
+// import { AIUsage } from '@/types/awareness';
+import { DeleteButton } from '@/components/buttons/DeleteButton';
 
 interface AIUsageFormProps {
     register: UseFormRegister<any>;
@@ -28,7 +29,7 @@ export function AIUsageForm({ register, errors, control }: AIUsageFormProps) {
             </div>
 
             {fields.map((field, index) => (
-                <div key={field.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-md">
+                <div key={field.id} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-md relative">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
                             AI Tool Name
@@ -57,7 +58,7 @@ export function AIUsageForm({ register, errors, control }: AIUsageFormProps) {
                         )}
                     </div>
 
-                    <div className="relative">
+                    <div>
                         <label className="block text-sm font-medium text-gray-700">
                             Primary Purpose
                         </label>
@@ -69,14 +70,11 @@ export function AIUsageForm({ register, errors, control }: AIUsageFormProps) {
                         {errors.aiUsage?.[index]?.purpose && (
                             <p className="mt-1 text-sm text-red-600">{errors.aiUsage[index].purpose.message}</p>
                         )}
-                        <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="absolute top-0 right-0 text-red-500 hover:text-red-700"
-                        >
-                            Remove
-                        </button>
                     </div>
+                    <DeleteButton
+                        onClick={() => remove(index)}
+                        className="absolute top-2 right-2"
+                    />
                 </div>
             ))}
         </div>

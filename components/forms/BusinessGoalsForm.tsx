@@ -1,6 +1,7 @@
 // components/forms/BusinessGoalsForm.tsx
 import { UseFormRegister, useFieldArray, Control } from 'react-hook-form';
 import { AwarenessFormInput } from '@/types/awareness';
+import { DeleteButton } from '@/components/buttons/DeleteButton';
 
 interface BusinessGoalsFormProps {
     register: UseFormRegister<AwarenessFormInput>;
@@ -43,8 +44,15 @@ export function BusinessGoalsForm({ register, errors, control }: BusinessGoalsFo
             <div className="space-y-4">
                 {fields.map((field, index) => (
                     <div key={field.id} className="grid grid-cols-1 gap-4 p-4 border rounded-md relative">
-                        <div className="absolute top-2 right-2 text-sm font-semibold text-gray-500">
-                            Rank: {index + 1}
+                        <div className="absolute top-2 right-2 flex items-center gap-2">
+                            {index > 0 && (
+                                <DeleteButton
+                                    onClick={() => remove(index)}
+                                />
+                            )}
+                            <span className="text-sm font-semibold text-gray-500">
+                                Rank: {index + 1}
+                            </span>
                         </div>
 
                         <div>
@@ -84,16 +92,6 @@ export function BusinessGoalsForm({ register, errors, control }: BusinessGoalsFo
                                 </p>
                             )}
                         </div>
-
-                        {index > 0 && (
-                            <button
-                                type="button"
-                                onClick={() => remove(index)}
-                                className="absolute top-2 right-12 text-red-500 hover:text-red-700"
-                            >
-                                Remove
-                            </button>
-                        )}
                     </div>
                 ))}
             </div>

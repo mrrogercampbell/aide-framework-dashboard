@@ -21,9 +21,9 @@ export function IntegrationSummaryForm({ register, errors, control }: Integratio
     const integrationSummary = useWatch({ control, name: "integrationSummary" });
 
     // For debugging
-    console.log('Business Goals:', businessGoals);
-    console.log('Critical Processes:', criticalProcesses);
-    console.log('Integration Summary:', integrationSummary);
+    // console.log('Business Goals:', businessGoals);
+    // console.log('Critical Processes:', criticalProcesses);
+    // console.log('Integration Summary:', integrationSummary);
 
     const integrationTiers = [
         { value: 'Isolated Tool', label: 'Tier 1: Isolated Tools', description: 'Ready-made AI solutions, quick to deploy, independent of existing systems' },
@@ -61,8 +61,8 @@ export function IntegrationSummaryForm({ register, errors, control }: Integratio
                 <h3 className="font-medium text-gray-900 mb-2">Integration Tiers Guide</h3>
                 <div className="space-y-2">
                     {integrationTiers.map((tier) => (
-                        <div key={tier.value} className="flex items-start space-x-2">
-                            <div className="font-medium text-sm text-gray-700">{tier.label}:</div>
+                        <div key={tier.value} className="grid grid-cols-[200px,1fr] gap-2">
+                            <div className="font-medium text-sm text-gray-700">{tier.label}</div>
                             <div className="text-sm text-gray-600">{tier.description}</div>
                         </div>
                     ))}

@@ -84,21 +84,32 @@ export default function AwarenessPage() {
             setFormId(result.formId);
             toast.success('Form submitted successfully!');
 
-            // Trigger PDF download
-            const pdfResponse = await fetch(`/api/awareness/${result.formId}/pdf`);
-            if (pdfResponse.ok) {
-                const blob = await pdfResponse.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${data.basicInfo.company}-awareness-workbook.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
+            // Updated PDF download logic
+            const pdfResponse = await fetch(`/api/forms/${result.formId}/pdf`);
+            const contentType = pdfResponse.headers.get('content-type');
+
+            if (!pdfResponse.ok) {
+                const errorData = await pdfResponse.json();
+                throw new Error(errorData.error || 'Failed to generate PDF');
             }
+
+            if (!contentType?.includes('application/pdf')) {
+                throw new Error('Invalid response format');
+            }
+
+            const blob = await pdfResponse.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${data.basicInfo.company}-workbook.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
         } catch (error) {
             console.error('Error:', error);
-            toast.error('Failed to submit form');
+            toast.error(error instanceof Error ? error.message : 'Failed to submit form');
         } finally {
             setIsSubmitting(false);
         }

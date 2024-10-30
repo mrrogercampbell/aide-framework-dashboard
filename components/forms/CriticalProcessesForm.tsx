@@ -1,6 +1,7 @@
 // components/forms/CriticalProcessesForm.tsx
 import { UseFormRegister, useFieldArray, Control, useWatch } from 'react-hook-form';
 import { AwarenessFormInput } from '@/types/awareness';
+import { DeleteButton } from '@/components/buttons/DeleteButton';
 
 interface CriticalProcessesFormProps {
     register: UseFormRegister<AwarenessFormInput>;
@@ -126,13 +127,10 @@ export function CriticalProcessesForm({ register, errors, control }: CriticalPro
                             </label>
                         </div>
 
-                        <button
-                            type="button"
+                        <DeleteButton
                             onClick={() => remove(index)}
-                            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                        >
-                            Remove
-                        </button>
+                            className="absolute top-2 right-2"
+                        />
                     </div>
                 ))}
             </div>
